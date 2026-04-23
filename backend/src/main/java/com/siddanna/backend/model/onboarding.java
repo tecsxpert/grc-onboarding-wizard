@@ -4,9 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-public class onboarding {
+@Table(name = "onboarding")
+public class Onboarding {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +19,16 @@ public class onboarding {
     private String role;
     private String description;
 
+    // ✅ ADD THIS (fixes your error)
+    private Boolean deleted = false;
+
     // getters
     public Long getId() { return id; }
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getRole() { return role; }
     public String getDescription() { return description; }
+    public Boolean getDeleted() { return deleted; }
 
     // setters
     public void setId(Long id) { this.id = id; }
@@ -30,4 +36,5 @@ public class onboarding {
     public void setEmail(String email) { this.email = email; }
     public void setRole(String role) { this.role = role; }
     public void setDescription(String description) { this.description = description; }
+    public void setDeleted(Boolean deleted) { this.deleted = deleted; }
 }
