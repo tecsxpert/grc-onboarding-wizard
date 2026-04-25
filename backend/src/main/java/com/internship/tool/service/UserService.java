@@ -6,6 +6,9 @@ import com.internship.tool.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @Service
@@ -14,7 +17,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // CREATE USER
+    //  CREATE USER
     public User createUser(User user) {
 
         validateUser(user);
@@ -26,19 +29,24 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // GET ALL USERS
+    //  GET ALL USERS (OLD - optional)
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // GET USER BY ID
+    //  NEW: PAGINATED USERS
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    //  GET USER BY ID
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found with id: " + id));
     }
 
-    // GET USER BY EMAIL
+    //  GET USER BY EMAIL
     public User getUserByEmail(String email) {
 
         if (email == null || email.isBlank()) {
@@ -50,13 +58,13 @@ public class UserService {
                         new ResourceNotFoundException("User not found with email: " + email));
     }
 
-    // DELETE USER
+    //  DELETE USER
     public void deleteUser(Long id) {
         User user = getUserById(id);
         userRepository.delete(user);
     }
 
-    // VALIDATION
+    //  VALIDATION (keep this for now)
     private void validateUser(User user) {
 
         if (user == null) {
