@@ -1,8 +1,8 @@
 package com.siddanna.backend.controller;
 
-import java.util.List;
-
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.siddanna.backend.model.Onboarding;
 import com.siddanna.backend.repository.OnboardingRepository;
@@ -24,12 +24,10 @@ public class OnboardingController {
         return repo.save(data);
     }
 
-    // ✅ READ
+    // ✅ READ (Pagination + Soft Delete)
     @GetMapping
-    public List<Onboarding> getAll() {
-        return repo.findAll().stream()
-                .filter(o -> !Boolean.TRUE.equals(o.getDeleted()))
-                .toList();
+    public Page<Onboarding> getAll(Pageable pageable) {
+        return repo.findByDeletedFalse(pageable);
     }
 
     // ✅ UPDATE
@@ -45,7 +43,7 @@ public class OnboardingController {
         return repo.save(existing);
     }
 
-    // ✅ DELETE (SOFT DELETE)
+    // ✅ DELETE (Soft Delete)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         Onboarding obj = repo.findById(id).orElseThrow();
@@ -55,7 +53,7 @@ public class OnboardingController {
 
     // ✅ SEARCH
     @GetMapping("/search")
-    public List<Onboarding> search(@RequestParam String q) {
+    public java.util.List<Onboarding> search(@RequestParam String q) {
         return repo.findAll().stream()
                 .filter(o -> !Boolean.TRUE.equals(o.getDeleted()))
                 .filter(o -> o.getName().toLowerCase().contains(q.toLowerCase()))
