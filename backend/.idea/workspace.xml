@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c4a57675-ccdd-4274-8c4f-bfcfb6b3e082" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://C:/Program Files/Eclipse Adoptium/jdk-17.0.18.8-hotspot/lib/src.zip!/java.base/java/time/format/ZoneName.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="jar://C:/Program Files/Eclipse Adoptium/jdk-17.0.18.8-hotspot/lib/src.zip!/java.base/sun/util/cldr/CLDRBaseLocaleDataMetaInfo.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="3Ciq2wYGLCw41LfQ0rn7wlrLZUg" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.UserServiceTest.executor": "Run",
+    "Maven. [clean,install].executor": "Run",
+    "Maven. [clean].executor": "Run",
+    "Maven. [install].executor": "Run",
+    "Maven.tool [clean,install,-U].executor": "Run",
+    "Maven.tool [clean,install].executor": "Run",
+    "Maven.tool [clean].executor": "Run",
+    "Maven.tool [dependency:purge-local-repository].executor": "Run",
+    "Maven.tool [install].executor": "Run",
+    "Maven.tool [spring-boot:run].executor": "Run",
+    "Maven.tool [test].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.ToolApplication.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "karthikgbhat",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/onboarding-wizard/backend",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "editor.preferences.tabs",
+    "to.speed.mode.migration.done": "true"
+  }
+}]]></component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn spring-boot:run" />
+      <command value="mvn clean install -U" />
+      <command value="mvn clean" />
+      <command value="mvn install" />
+      <command value="mvn dependency:purge-local-repository" />
+      <command value="mvn clean install" />
+      <command value="mvn test" />
+    </option>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c4a57675-ccdd-4274-8c4f-bfcfb6b3e082" name="Changes" comment="" />
+      <created>1776878536227</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1776878536227</updated>
+    </task>
+    <servers />
+  </component>
+</project>

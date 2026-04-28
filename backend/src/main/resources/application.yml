@@ -1,13 +1,13 @@
 spring:
   security:
     user:
-      name: admin
-      password: admin123
+      name: ${APP_USER:admin}
+      password: ${APP_PASSWORD:admin123}
 
   datasource:
     url: jdbc:postgresql://localhost:5432/tooldb
-    username: postgres
-    password: postgres123
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -25,8 +25,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: bhatkarthik93@gmail.com
-    password: ptmkxtdbppsdcavb
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -38,4 +38,4 @@ server:
   port: 8081
 
 jwt:
-  secret: mysecretkey
+  secret: ${JWT_SECRET}
