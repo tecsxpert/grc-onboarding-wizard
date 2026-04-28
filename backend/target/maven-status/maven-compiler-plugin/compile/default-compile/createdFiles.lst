@@ -16,6 +16,7 @@ com\internship\tool\repository\UserRepository.class
 com\internship\tool\service\UserService.class
 com\internship\tool\entity\User.class
 com\internship\tool\controller\AuthController.class
+com\internship\tool\exception\ErrorResponse.class
 com\internship\tool\config\JwtUtil.class
 com\internship\tool\exception\GlobalExceptionHandler.class
 com\internship\tool\service\ReminderService.class

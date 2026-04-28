@@ -16,10 +16,15 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 @Service
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -39,12 +44,10 @@ public class UserService {
             throw new DuplicateResourceException("Email already exists");
         }
 
-        // ✅ Set default role
         if (user.getRole() == null) {
             user.setRole(Role.USER);
         }
 
-        // ✅ Encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user);
@@ -55,7 +58,7 @@ public class UserService {
     // =========================
     @Cacheable(value = "users")
     public List<User> getAllUsers() {
-        System.out.println("Fetching users from DB...");
+        logger.info("Fetching users from DB...");
         return userRepository.findAll();
     }
 
@@ -65,7 +68,7 @@ public class UserService {
     @Cacheable(value = "usersPage",
             key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     public Page<User> getAllUsers(Pageable pageable) {
-        System.out.println("Fetching paginated users from DB...");
+        logger.info("Fetching paginated users from DB...");
         return userRepository.findAll(pageable);
     }
 
@@ -74,10 +77,10 @@ public class UserService {
     // =========================
     @Cacheable(value = "user", key = "#id")
     public User getUserById(Long id) {
-        System.out.println("Fetching user by ID from DB...");
+        logger.info("Fetching user by ID: {}", id);
         return userRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found with id: " + id));
+                        new ResourceNotFoundException("User", "id", id));
     }
 
     // =========================
@@ -90,10 +93,11 @@ public class UserService {
             throw new InvalidInputException("Email cannot be empty");
         }
 
-        System.out.println("Fetching user by email from DB...");
+        logger.info("Fetching user by email: {}", email);
+
         return userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found with email: " + email));
+                        new ResourceNotFoundException("User", "email", email));
     }
 
     // =========================
@@ -104,14 +108,12 @@ public class UserService {
 
         User existingUser = getUserById(id);
 
-        // ✅ Update only if values are provided
         if (user.getName() != null && !user.getName().isBlank()) {
             existingUser.setName(user.getName());
         }
 
         if (user.getEmail() != null && !user.getEmail().isBlank()) {
 
-            // Prevent duplicate email
             if (!existingUser.getEmail().equals(user.getEmail()) &&
                     userRepository.existsByEmail(user.getEmail())) {
                 throw new DuplicateResourceException("Email already exists");
@@ -120,12 +122,10 @@ public class UserService {
             existingUser.setEmail(user.getEmail());
         }
 
-        // ✅ Update password only if provided
         if (user.getPassword() != null && !user.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        // ✅ Update role (optional — usually ADMIN only)
         if (user.getRole() != null) {
             existingUser.setRole(user.getRole());
         }
@@ -138,7 +138,11 @@ public class UserService {
     // =========================
     @CacheEvict(value = {"users", "user", "userEmail", "usersPage"}, allEntries = true)
     public void deleteUser(Long id) {
-        User user = getUserById(id);
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User", "id", id));
+
         userRepository.delete(user);
     }
 
@@ -155,7 +159,8 @@ public class UserService {
             throw new InvalidInputException("Name is required");
         }
 
-        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+        if (user.getEmail() == null ||
+                !user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             throw new InvalidInputException("Invalid email format");
         }
 

@@ -10,6 +10,7 @@ D:\onboarding-wizard\backend\src\main\java\com\internship\tool\entity\BaseEntity
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\exception\DuplicateResourceException.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\controller\AuthController.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\service\UserService.java
+D:\onboarding-wizard\backend\src\main\java\com\internship\tool\exception\ErrorResponse.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\service\EmailService.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\entity\Role.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\entity\User.java

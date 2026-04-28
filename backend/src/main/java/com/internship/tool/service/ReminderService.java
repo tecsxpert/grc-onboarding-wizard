@@ -21,7 +21,7 @@ public class ReminderService {
     private final UserRepository userRepository;
 
     // ✅ Runs every day at 9 AM
-    @Scheduled(fixedRate = 6000, zone = "Asia/Kolkata")
+    @Scheduled(cron = "0 0 9 * * ?", zone = "Asia/Kolkata")
     public void sendDailyReminders() {
 
         log.info("Starting daily reminder job...");
