@@ -3,6 +3,7 @@ import os
 import json
 from groq import Groq
 from dotenv import load_dotenv
+from prompts.report_prompt import get_report_prompt
 from prompts.primary_prompt import get_primary_prompt
 from prompts.recommend_prompt import get_recommend_prompt
 
@@ -39,3 +40,21 @@ def call_groq_recommend(user_input: str) -> list:
 
     recommendations = json.loads(raw)
     return recommendations
+
+def call_groq_report(user_input: str) -> dict:
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {"role": "user", "content": get_report_prompt(user_input)}
+        ]
+    )
+
+    raw = response.choices[0].message.content.strip()
+
+    # Clean markdown if present
+    if raw.startswith("```"):
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+
+    return json.loads(raw.strip())

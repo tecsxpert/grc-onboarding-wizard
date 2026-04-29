@@ -4,8 +4,10 @@ def register_routes(app):
     from .describe import describe_bp
     from .recommend import recommend_bp
     from .items import items_bp
+    from .report import report_bp
 
     app.register_blueprint(example_bp)
     app.register_blueprint(describe_bp)
     app.register_blueprint(recommend_bp)
     app.register_blueprint(items_bp)
+    app.register_blueprint(report_bp)
