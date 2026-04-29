@@ -2,12 +2,8 @@ package com.siddanna.backend.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "onboarding")
@@ -17,17 +13,22 @@ public class Onboarding {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is required")
     private String name;
+
+    @Email(message = "Invalid email")
+    @NotBlank(message = "Email is required")
     private String email;
+
+    @NotBlank(message = "Role is required")
     private String role;
+
     private String description;
 
     private Boolean deleted = false;
 
-    // 🔥 NEW FIELD (IMPORTANT FOR DAY 7)
     private LocalDateTime createdAt;
 
-    // 🔥 AUTO SET TIME WHEN RECORD IS CREATED
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

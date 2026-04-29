@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,9 +36,10 @@ public class OnboardingController {
 
     // ✅ CREATE
     @PostMapping
-    public Onboarding save(@RequestBody Onboarding data) {
-        return repo.save(data);
-    }
+public Onboarding save(@Valid @RequestBody Onboarding data) {
+    return repo.save(data);
+
+}
 
     // ✅ READ (Pagination + Date Filter + Soft Delete)
     @GetMapping
