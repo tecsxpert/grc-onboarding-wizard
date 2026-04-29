@@ -1,31 +1,52 @@
-
 spring:
   security:
-    user:
-      name: admin
-      password: admin123
+    spring.security.user.name=admin
+    spring.security.user.password=password123
+  logging:
+    level:
+      org:
+        springframework:
+          security=DEBUG:
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/tooldb
+    url: jdbc:postgresql://postgres:5432/tooldb
     username: postgres
-    password: postgres123
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
-  redis:
-    host: localhost
-    port: 6379
+  data:
+    redis:
+      host: redis
+      port: 6379
 
   mail:
-    host: localhost
-    port: 1025
-    username: test
-    password: test
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   port: 8081
 
 jwt:
-  secret: mysecretkey
+  secret: ${JWT_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
