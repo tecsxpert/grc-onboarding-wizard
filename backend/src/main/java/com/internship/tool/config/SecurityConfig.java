@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,29 +22,37 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
 
-    // ✅ REQUIRED for login password matching
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
 
-                // ✅ disable default login popup
-                .httpBasic(httpBasic -> httpBasic.disable())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()   // open APIs
-                        .anyRequest().authenticated()              // secured APIs
+                        // ✅ allow ALL auth endpoints
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // ✅ allow actuator (docker healthcheck)
+                        .requestMatchers("/actuator/**").permitAll()
+
+                        // ✅ allow preflight (important for frontend)
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // 🔒 secure everything else
+                        .anyRequest().authenticated()
                 )
 
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
-
-        // ✅ JWT filter must be BEFORE Spring security filter
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // Password encoder
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

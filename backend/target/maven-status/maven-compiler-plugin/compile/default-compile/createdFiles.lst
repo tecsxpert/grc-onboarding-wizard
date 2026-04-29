@@ -1,4 +1,3 @@
-com\internship\tool\config\PasswordConfig.class
 com\internship\tool\controller\TestController.class
 com\internship\tool\config\JpaConfig.class
 com\internship\tool\entity\Role.class

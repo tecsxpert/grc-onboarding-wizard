@@ -10,9 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
@@ -30,17 +31,14 @@ public class AuthController {
     @PostMapping("/register")
     public User register(@RequestBody User user) {
 
-        // ✅ prevent duplicate email
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
-        // ✅ set default role
         if (user.getRole() == null) {
             user.setRole(Role.USER);
         }
 
-        // ✅ encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user);
@@ -61,7 +59,6 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(dbUser);
 
-        // ✅ return JSON instead of plain string
         return Map.of("token", token);
     }
 
@@ -84,5 +81,28 @@ public class AuthController {
         String newToken = jwtUtil.generateToken(user);
 
         return Map.of("token", newToken);
+    }
+
+    // =========================
+    // GET ALL USERS
+    // =========================
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // =========================
+    // DELETE USER
+    // =========================
+    @DeleteMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id) {
+
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found");
+        }
+
+        userRepository.deleteById(id);
+
+        return "User deleted successfully";
     }
 }

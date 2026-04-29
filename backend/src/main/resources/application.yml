@@ -1,13 +1,14 @@
 spring:
   security:
     user:
-      name: ${APP_USER:admin}
-      password: ${APP_PASSWORD:admin123}
+      name: admin
+      password: admin123
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/tooldb
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://postgres:5432/tooldb
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -19,7 +20,7 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
 
   mail:
@@ -39,3 +40,9 @@ server:
 
 jwt:
   secret: ${JWT_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

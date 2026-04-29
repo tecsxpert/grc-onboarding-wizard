@@ -1,12 +1,9 @@
-# Environment variables
+# Environment variables (REAL secrets)
 .env
 
-# Local config files
+# Local override configs (safe to ignore)
 application-local.yml
 application-local.properties
-
-# Sensitive configs (optional if needed)
-src/main/resources/application.yml
 
 # Logs
 *.log
@@ -14,3 +11,6 @@ src/main/resources/application.yml
 # OS files
 .DS_Store
 Thumbs.db
+
+# Build files
+target/

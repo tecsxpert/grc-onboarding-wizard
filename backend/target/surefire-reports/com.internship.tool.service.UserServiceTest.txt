@@ -1,20 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.internship.tool.service.UserServiceTest
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 2.414 s <<< FAILURE! -- in com.internship.tool.service.UserServiceTest
-com.internship.tool.service.UserServiceTest.updateUser_success -- Time elapsed: 0.021 s <<< ERROR!
-java.lang.NullPointerException: Cannot invoke "org.springframework.security.crypto.password.PasswordEncoder.encode(java.lang.CharSequence)" because "this.passwordEncoder" is null
-	at com.internship.tool.service.UserService.updateUser(UserService.java:126)
-	at com.internship.tool.service.UserServiceTest.updateUser_success(UserServiceTest.java:104)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
-com.internship.tool.service.UserServiceTest.createUser_success -- Time elapsed: 0.013 s <<< ERROR!
-java.lang.NullPointerException: Cannot invoke "org.springframework.security.crypto.password.PasswordEncoder.encode(java.lang.CharSequence)" because "this.passwordEncoder" is null
-	at com.internship.tool.service.UserService.createUser(UserService.java:51)
-	at com.internship.tool.service.UserServiceTest.createUser_success(UserServiceTest.java:46)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.907 s -- in com.internship.tool.service.UserServiceTest

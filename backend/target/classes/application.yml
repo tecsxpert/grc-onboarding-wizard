@@ -5,9 +5,10 @@ spring:
       password: admin123
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/tooldb
+    url: jdbc:postgresql://postgres:5432/tooldb
     username: postgres
-    password: postgres123
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -19,14 +20,14 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: bhatkarthik93@gmail.com
-    password: ptmkxtdbppsdcavb
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -38,4 +39,10 @@ server:
   port: 8081
 
 jwt:
-  secret: mysecretkey
+  secret: ${JWT_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

@@ -4,7 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c4a57675-ccdd-4274-8c4f-bfcfb6b3e082" name="Changes" comment="" />
+    <list default="true" id="c4a57675-ccdd-4274-8c4f-bfcfb6b3e082" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/../.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ai-service/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../ai-service/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ai-service/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../ai-service/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ai-service/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../ai-service/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/internship/tool/config/PasswordConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/internship/tool/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/internship/tool/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/internship/tool/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/internship/tool/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/internship/tool/config/PasswordConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/internship/tool/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/internship/tool/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/internship/tool/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/internship/tool/controller/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/internship/tool/service/ReminderService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/internship/tool/service/ReminderService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2026-04-28T11-42-20_585.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.internship.tool.service.UserServiceTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.internship.tool.service.UserServiceTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/com.internship.tool.service.UserServiceTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/com.internship.tool.service.UserServiceTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/tool-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/tool-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/tool-0.0.1-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/tool-0.0.1-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,39 +64,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.UserServiceTest.executor": "Run",
-    "Maven. [clean,install].executor": "Run",
-    "Maven. [clean].executor": "Run",
-    "Maven. [install].executor": "Run",
-    "Maven.tool [clean,install,-U].executor": "Run",
-    "Maven.tool [clean,install].executor": "Run",
-    "Maven.tool [clean].executor": "Run",
-    "Maven.tool [dependency:purge-local-repository].executor": "Run",
-    "Maven.tool [install].executor": "Run",
-    "Maven.tool [spring-boot:run].executor": "Run",
-    "Maven.tool [test].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.ToolApplication.executor": "Run",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "karthikgbhat",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/onboarding-wizard/backend",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "editor.preferences.tabs",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.UserServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.tool [clean,install,-U].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.tool [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.tool [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.tool [dependency:purge-local-repository].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.tool [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.tool [spring-boot:run].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.tool [test].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ToolApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;karthikgbhat&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/onboarding-wizard/backend&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn spring-boot:run" />
@@ -77,8 +104,8 @@
       <command value="mvn clean" />
       <command value="mvn install" />
       <command value="mvn dependency:purge-local-repository" />
-      <command value="mvn clean install" />
       <command value="mvn test" />
+      <command value="mvn clean install" />
     </option>
   </component>
   <component name="SharedIndexes">

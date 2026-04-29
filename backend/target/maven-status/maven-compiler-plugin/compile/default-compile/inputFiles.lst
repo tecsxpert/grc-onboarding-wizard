@@ -18,5 +18,4 @@ D:\onboarding-wizard\backend\src\main\java\com\internship\tool\ToolApplication.j
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\exception\GlobalExceptionHandler.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\RedisConfig.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\JpaConfig.java
-D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\PasswordConfig.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\exception\ResourceNotFoundException.java
