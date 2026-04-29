@@ -3,34 +3,72 @@ package com.internship.tool.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 404
+    // =========================
+    // 404 - Resource Not Found
+    // =========================
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(
+                new ErrorResponse(404, "NOT_FOUND", ex.getMessage()),
+                HttpStatus.NOT_FOUND
+        );
     }
 
-    // 400 (validation)
+    // =========================
+    // 400 - Invalid Input (Custom)
+    // =========================
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidInput(InvalidInputException ex) {
+        return new ResponseEntity<>(
+                new ErrorResponse(400, "BAD_REQUEST", ex.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    // =========================
+    // 400 - Duplicate Resource
+    // =========================
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicate(DuplicateResourceException ex) {
+        return new ResponseEntity<>(
+                new ErrorResponse(400, "BAD_REQUEST", ex.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    // =========================
+    // 400 - Validation Errors (@Valid)
+    // =========================
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
 
-        ex.getBindingResult().getFieldErrors()
-                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .findFirst()
+                .map(error -> error.getField() + " : " + error.getDefaultMessage())
+                .orElse("Validation error");
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                new ErrorResponse(400, "BAD_REQUEST", message),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
-    // generic
+    // =========================
+    // 500 - Generic Exception
+    // =========================
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneral(Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
+        return new ResponseEntity<>(
+                new ErrorResponse(500, "INTERNAL_SERVER_ERROR", ex.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }
