@@ -13,9 +13,8 @@ function DetailPage() {
   }, []);
 
   const fetchData = async () => {
-    const res = await API.get(`/onboarding?page=0&size=100`);
-    const item = res.data.content.find((x) => x.id == id);
-    setData(item);
+    const res = await API.get(`/onboarding/${id}`);
+    setData(res.data);
   };
 
   const handleDelete = async () => {
@@ -33,18 +32,16 @@ function DetailPage() {
         <p><b>Email:</b> {data.email}</p>
         <p><b>Role:</b> {data.role}</p>
 
-        {/* 🔥 SCORE BADGE (simple) */}
         <div className="mt-3">
           <span className="bg-blue-500 text-white px-3 py-1 rounded">
             Score: {data.id}
           </span>
         </div>
 
-        {/* BUTTONS */}
         <div className="mt-4 flex gap-3">
           <button
             className="bg-yellow-400 px-3 py-1"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate(`/edit/${id}`)} // ✅ FIXED
           >
             Edit
           </button>
