@@ -1,8 +1,12 @@
 spring:
   security:
-    user:
-      name: admin
-      password: admin123
+    spring.security.user.name=admin
+    spring.security.user.password=password123
+  logging:
+    level:
+      org:
+        springframework:
+          security=DEBUG:
 
   datasource:
     url: jdbc:postgresql://postgres:5432/tooldb

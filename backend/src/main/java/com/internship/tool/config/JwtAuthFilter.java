@@ -21,6 +21,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+
+        // ✅ Clean way to skip filtering
+        return path.startsWith("/swagger") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/auth");
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
@@ -36,7 +47,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 String username = jwtUtil.extractUsername(token);
                 String role = jwtUtil.extractRole(token);
 
-                // ✅ VALIDATE TOKEN (IMPORTANT)
                 if (username != null && role != null &&
                         jwtUtil.validateToken(token, username) &&
                         SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -55,7 +65,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
 
             } catch (Exception e) {
-                // ❗ invalid token → do nothing (request will be unauthorized)
+                // ❗ Do NOT break request flow
                 System.out.println("Invalid JWT: " + e.getMessage());
             }
         }
