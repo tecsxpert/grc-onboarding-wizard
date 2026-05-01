@@ -5,7 +5,8 @@ import com.internship.tool.entity.User;
 import com.internship.tool.entity.Role;
 import com.internship.tool.repository.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,95 +15,155 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     // =========================
     // REGISTER
     // =========================
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
 
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists");
+        // 🔥 NULL CHECK
+        if (user == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "User cannot be null"));
         }
 
+        // 🔥 VALIDATION
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Email is required"));
+        }
+
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Password is required"));
+        }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Email already exists"));
+        }
+
+        // 🔥 DEFAULT ROLE
         if (user.getRole() == null) {
             user.setRole(Role.USER);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of(
+                "message", "User registered successfully",
+                "userId", savedUser.getId()
+        ));
     }
 
     // =========================
     // LOGIN
     // =========================
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
+
+        if (user == null || user.getEmail() == null || user.getPassword() == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Email and password required"));
+        }
 
         User dbUser = userRepository.findByEmail(user.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElse(null);
+
+        if (dbUser == null) {
+            return ResponseEntity.status(401)
+                    .body(Map.of("error", "User not found"));
+        }
 
         if (!passwordEncoder.matches(user.getPassword(), dbUser.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            return ResponseEntity.status(401)
+                    .body(Map.of("error", "Invalid credentials"));
         }
 
         String token = jwtUtil.generateToken(dbUser);
 
-        return Map.of("token", token);
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "email", dbUser.getEmail(),
+                "role", dbUser.getRole().name()
+        ));
     }
 
     // =========================
     // REFRESH TOKEN
     // =========================
     @GetMapping("/refresh")
-    public Map<String, String> refresh(@RequestHeader("Authorization") String header) {
+    public ResponseEntity<?> refresh(@RequestHeader(value = "Authorization", required = false) String header) {
 
         if (header == null || !header.startsWith("Bearer ")) {
-            throw new RuntimeException("Invalid Authorization header");
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid Authorization header"));
         }
 
-        String token = header.substring(7);
-        String username = jwtUtil.extractUsername(token);
+        try {
+            String token = header.substring(7);
+            String username = jwtUtil.extractUsername(token);
 
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+            User user = userRepository.findByEmail(username)
+                    .orElse(null);
 
-        String newToken = jwtUtil.generateToken(user);
+            if (user == null) {
+                return ResponseEntity.status(404)
+                        .body(Map.of("error", "User not found"));
+            }
 
-        return Map.of("token", newToken);
+            String newToken = jwtUtil.generateToken(user);
+
+            return ResponseEntity.ok(Map.of("token", newToken));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(401)
+                    .body(Map.of("error", "Invalid or expired token"));
+        }
     }
 
     // =========================
-    // GET ALL USERS
+    // GET ALL USERS (Protected)
     // =========================
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> getAllUsers() {
+
+        List<User> users = userRepository.findAll();
+
+        if (users == null || users.isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+
+        return ResponseEntity.ok(users);
     }
 
     // =========================
-    // DELETE USER
+    // DELETE USER (Protected)
     // =========================
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+
+        if (id == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "ID cannot be null"));
+        }
 
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found");
+            return ResponseEntity.status(404)
+                    .body(Map.of("error", "User not found"));
         }
 
         userRepository.deleteById(id);
 
-        return "User deleted successfully";
+        return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
     }
 }

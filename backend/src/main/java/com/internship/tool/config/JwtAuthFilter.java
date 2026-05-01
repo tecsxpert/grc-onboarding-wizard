@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,20 +15,20 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
 
-        // ✅ Clean way to skip filtering
-        return path.startsWith("/swagger") ||
+        // ✅ FIX: match correct paths
+        return path.startsWith("/api/auth") ||          // 🔥 IMPORTANT FIX
+                path.startsWith("/swagger") ||
                 path.startsWith("/v3/api-docs") ||
-                path.startsWith("/swagger-ui") ||
-                path.startsWith("/auth");
+                path.startsWith("/swagger-ui");
     }
 
     @Override
@@ -39,35 +39,39 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+        // ✅ No token → just continue (Spring will handle auth)
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-            String token = authHeader.substring(7);
+        String token = authHeader.substring(7);
 
-            try {
-                String username = jwtUtil.extractUsername(token);
-                String role = jwtUtil.extractRole(token);
+        try {
+            String username = jwtUtil.extractUsername(token);
+            String role = jwtUtil.extractRole(token);
 
-                if (username != null && role != null &&
-                        jwtUtil.validateToken(token, username) &&
-                        SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (username != null &&
+                    role != null &&
+                    jwtUtil.validateToken(token, username) &&
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                    List<SimpleGrantedAuthority> authorities =
-                            List.of(new SimpleGrantedAuthority("ROLE_" + role));
+                List<SimpleGrantedAuthority> authorities =
+                        List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
-                    UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(
-                                    username,
-                                    null,
-                                    authorities
-                            );
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                username,
+                                null,
+                                authorities
+                        );
 
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
-
-            } catch (Exception e) {
-                // ❗ Do NOT break request flow
-                System.out.println("Invalid JWT: " + e.getMessage());
+                SecurityContextHolder.getContext().setAuthentication(auth);
             }
+
+        } catch (Exception e) {
+            // ✅ Never break flow
+            System.out.println("Invalid JWT: " + e.getMessage());
         }
 
         filterChain.doFilter(request, response);

@@ -3,20 +3,22 @@ package com.internship.tool.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;   // ✅ NEW
+import org.springframework.security.crypto.password.PasswordEncoder;      // ✅ NEW
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity // Added to ensure security is fully enabled
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -26,56 +28,65 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // 1. Handle CORS (Crucial if your UI is on a different port)
+                // CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // 2. Disable CSRF for Stateless APIs
+                // Disable CSRF
                 .csrf(csrf -> csrf.disable())
 
-                // 3. Explicitly disable default login UI and HTTP Basic
+                // Disable default login
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable())
 
-                // 4. Handle Unauthorized Access (Fix for the popup in image_a7ba99.png)
+                // Handle Unauthorized
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(
                         (request, response, authException) -> {
-                            // Sending SC_UNAUTHORIZED (401) without a WWW-Authenticate header
-                            // prevents the browser from showing the dialog seen in image_a7ba99.png
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("Unauthorized: Please log in.");
+                            response.getWriter().write("Unauthorized");
                         }
                 ))
 
-                // 5. Permit Swagger and Auth endpoints
+                // Authorization rules
                 .authorizeHttpRequests(auth -> auth
+                        // ✅ Public endpoints
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // ✅ Swagger
                         .requestMatchers(
-                                "/auth/**",
                                 "/v3/api-docs/**",
-                                "/v3/api-docs",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/swagger-resources/**",
-                                "/webjars/**"
+                                "/swagger-ui.html"
                         ).permitAll()
+
+                        // ✅ CORS preflight
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // 🔒 Everything else secured
                         .anyRequest().authenticated()
                 )
 
-                // 6. Stateless Session Management
+                // Stateless session
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // 7. JWT Filter
+                // JWT filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    // ✅ 🔥 REQUIRED FIX (this was missing)
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("*")); // Adjust for production!
+        config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept", "Authorization"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 

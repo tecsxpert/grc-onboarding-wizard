@@ -1,14 +1,17 @@
 spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+
   security:
     user:
       name: admin
       password: admin123
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/tooldb
+    url: jdbc:postgresql://localhost:5432/tooldb
     username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    password: postgres123
 
   jpa:
     hibernate:
@@ -20,14 +23,14 @@ spring:
 
   data:
     redis:
-      host: redis
+      host: redis_cache
       port: 6379
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    username: bhatkarthik93@gmail.com
+    password: ptmkxtdbppsdcavb
     properties:
       mail:
         smtp:
@@ -39,7 +42,7 @@ server:
   port: 8081
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: mysecretkey
 
 management:
   endpoints:
