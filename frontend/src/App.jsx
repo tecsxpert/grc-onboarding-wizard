@@ -3,7 +3,7 @@ import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
 import OnboardingPage from "./pages/OnboardingPage";
 import DetailPage from "./pages/DetailPage";
-import AnalyticsPage from "./pages/AnalyticsPage"; // 🔥 NEW
+import AnalyticsPage from "./pages/AnalyticsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
         {/* LOGIN */}
         <Route path="/" element={<LoginPage />} />
 
-        {/* HOME (CREATE + LIST) */}
+        {/* HOME */}
         <Route
           path="/home"
           element={
@@ -24,7 +24,7 @@ function App() {
           }
         />
 
-        {/* EDIT PAGE */}
+        {/* EDIT */}
         <Route
           path="/edit/:id"
           element={
@@ -44,7 +44,7 @@ function App() {
           }
         />
 
-        {/* DETAIL PAGE */}
+        {/* DETAIL */}
         <Route
           path="/detail/:id"
           element={
@@ -54,7 +54,7 @@ function App() {
           }
         />
 
-        {/* 🔥 ANALYTICS PAGE (DAY 10) */}
+        {/* 🔥 ANALYTICS (DAY 10) */}
         <Route
           path="/analytics"
           element={
