@@ -16,16 +16,16 @@ def describe():
     if "text" not in data:
         return jsonify({"success": False, "error": "Missing required field: text"}), 400
 
-    # Validate and sanitize input
     cleaned_text, is_valid, error = validate_and_sanitize(data["text"])
     if not is_valid:
         return jsonify({"success": False, "error": error}), 400
 
-    ai_output = call_groq(cleaned_text)
+    result = call_groq(cleaned_text)
 
     return jsonify({
         "success": True,
         "input": cleaned_text,
-        "output": ai_output,
+        "output": result["output"],
+        "is_fallback": result["is_fallback"],
         "generated_at": datetime.utcnow().isoformat()
     }), 200

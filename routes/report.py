@@ -16,24 +16,16 @@ def generate_report():
     if "text" not in data:
         return jsonify({"success": False, "error": "Missing required field: text"}), 400
 
-    # Validate and sanitize input
     cleaned_text, is_valid, error = validate_and_sanitize(data["text"])
     if not is_valid:
         return jsonify({"success": False, "error": error}), 400
 
-    try:
-        report = call_groq_report(cleaned_text)
-        return jsonify({
-            "success": True,
-            "input": cleaned_text,
-            "report": report,
-            "generated_at": datetime.utcnow().isoformat(),
-            "is_fallback": False
-        }), 200
-    except Exception as e:
-        return jsonify({
-            "success": False,
-            "is_fallback": True,
-            "error": "Failed to generate report.",
-            "generated_at": datetime.utcnow().isoformat()
-        }), 500
+    result = call_groq_report(cleaned_text)
+
+    return jsonify({
+        "success": True,
+        "input": cleaned_text,
+        "report": result["report"],
+        "is_fallback": result["is_fallback"],
+        "generated_at": datetime.utcnow().isoformat()
+    }), 200

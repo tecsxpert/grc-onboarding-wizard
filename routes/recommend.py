@@ -16,18 +16,16 @@ def recommend():
     if "text" not in data:
         return jsonify({"success": False, "error": "Missing required field: text"}), 400
 
-    # Validate and sanitize input
     cleaned_text, is_valid, error = validate_and_sanitize(data["text"])
     if not is_valid:
         return jsonify({"success": False, "error": error}), 400
 
-    try:
-        recommendations = call_groq_recommend(cleaned_text)
-        return jsonify({
-            "success": True,
-            "input": cleaned_text,
-            "recommendations": recommendations,
-            "generated_at": datetime.utcnow().isoformat()
-        }), 200
-    except Exception as e:
-        return jsonify({"success": False, "error": f"Failed: {str(e)}"}), 500
+    result = call_groq_recommend(cleaned_text)
+
+    return jsonify({
+        "success": True,
+        "input": cleaned_text,
+        "recommendations": result["recommendations"],
+        "is_fallback": result["is_fallback"],
+        "generated_at": datetime.utcnow().isoformat()
+    }), 200
