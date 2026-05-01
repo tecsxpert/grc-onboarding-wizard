@@ -1,1 +1,17 @@
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\service\ReminderServiceTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\exception\GlobalExceptionHandlerTest.java
 D:\onboarding-wizard\backend\src\test\java\com\internship\tool\service\UserServiceTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\entity\BaseEntityTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\service\EmailServiceTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\ToolApplicationTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\entity\RoleEnumTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\config\SecurityConfigExtraTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\config\JwtUtilTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\controller\UserControllerTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\repository\UserRepositoryTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\config\SecurityConfigTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\entity\UserTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\exception\ErrorResponseTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\controller\AuthControllerTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\entity\UserEntityTest.java
+D:\onboarding-wizard\backend\src\test\java\com\internship\tool\exception\ExceptionTest.java

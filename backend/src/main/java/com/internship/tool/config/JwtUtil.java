@@ -19,12 +19,21 @@ public class JwtUtil {
     }
 
     // =========================
-    // GENERATE TOKEN (WITH ROLE)
+    // GENERATE TOKEN
     // =========================
     public String generateToken(User user) {
+
+        if (user == null || user.getEmail() == null) {
+            throw new IllegalArgumentException("User or email cannot be null");
+        }
+
+        String role = (user.getRole() != null)
+                ? user.getRole().name()
+                : "USER"; // fallback
+
         return Jwts.builder()
                 .setSubject(user.getEmail())
-                .claim("role", user.getRole().name()) // ✅ REQUIRED FOR RBAC
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
@@ -35,38 +44,64 @@ public class JwtUtil {
     // EXTRACT USERNAME
     // =========================
     public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
+        return extractClaimsSafe(token).getSubject();
     }
 
     // =========================
     // EXTRACT ROLE
     // =========================
     public String extractRole(String token) {
-        return extractClaims(token).get("role", String.class);
+        return extractClaimsSafe(token).get("role", String.class);
     }
 
     // =========================
-    // EXTRACT ALL CLAIMS
+    // EXTRACT ALL CLAIMS (SAFE)
     // =========================
-    private Claims extractClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    private Claims extractClaimsSafe(String token) {
+
+        if (token == null || token.isBlank()) {
+            throw new IllegalArgumentException("Token cannot be null or empty");
+        }
+
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("Token expired");
+
+        } catch (UnsupportedJwtException |
+                 MalformedJwtException |
+                 SecurityException |
+                 IllegalArgumentException e) {
+
+            throw new RuntimeException("Invalid token");
+        }
     }
 
     // =========================
     // VALIDATE TOKEN
     // =========================
     public boolean validateToken(String token, String username) {
-        return username.equals(extractUsername(token)) && !isTokenExpired(token);
+
+        if (token == null || username == null) {
+            return false;
+        }
+
+        try {
+            return username.equals(extractUsername(token)) && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // =========================
     // CHECK EXPIRATION
     // =========================
     private boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
+        return extractClaimsSafe(token).getExpiration().before(new Date());
     }
 }

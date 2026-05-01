@@ -20,7 +20,7 @@ public class ReminderService {
     private final EmailService emailService;
     private final UserRepository userRepository;
 
-    // ✅ Runs every day at 9 AM
+    // Runs every day at 9 AM
     @Scheduled(cron = "0 0 9 * * ?", zone = "Asia/Kolkata")
     public void sendDailyReminders() {
 
@@ -28,15 +28,22 @@ public class ReminderService {
 
         List<User> users = userRepository.findAll();
 
-        if (users.isEmpty()) {
+        // ✅ handle null safely (coverage branch)
+        if (users == null || users.isEmpty()) {
             log.warn("No users found for sending reminders.");
             return;
         }
 
         for (User user : users) {
 
-            // ✅ Skip invalid users
-            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            // ✅ skip null user (extra branch)
+            if (user == null) {
+                log.warn("Skipping null user");
+                continue;
+            }
+
+            // ✅ skip invalid email
+            if (user.getEmail() == null || user.getEmail().isBlank()) {
                 log.warn("Skipping user with missing email: {}", user.getId());
                 continue;
             }
@@ -57,12 +64,11 @@ public class ReminderService {
                 log.info("Reminder sent to: {}", user.getEmail());
 
             } catch (Exception e) {
+                // ✅ error branch (important for coverage)
                 log.error("Failed to send email to: {}", user.getEmail(), e);
             }
         }
 
         log.info("Daily reminder job completed.");
     }
-
-
 }
