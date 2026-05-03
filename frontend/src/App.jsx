@@ -7,12 +7,7 @@ import AnalyticsPage from "./pages/AnalyticsPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-
-        {/* LOGIN */}
-        <Route path="/" element={<LoginPage />} />
+  const [count, setCount] = useState(0)
 
         {/* HOME */}
         <Route
@@ -34,15 +29,7 @@ function App() {
           }
         />
 
-        {/* DASHBOARD */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+      <div className="ticks"></div>
 
         {/* DETAIL */}
         <Route
@@ -69,4 +56,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
