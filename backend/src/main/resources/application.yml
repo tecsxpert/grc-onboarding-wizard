@@ -5,13 +5,14 @@ spring:
 
   security:
     user:
-      name: ${SPRING_SECURITY_USER_NAME:admin}
-      password: ${SPRING_SECURITY_USER_PASSWORD:admin123}
+      name: ${APP_ADMIN_USER:admin}
+      password: ${APP_ADMIN_PASS:admin123}
 
   datasource:
+    # Use environment variables for DB connection
     url: ${DB_URL:jdbc:postgresql://localhost:5432/tooldb}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres123}
+    password: ${DB_PASSWORD:password_placeholder}
 
   jpa:
     hibernate:
@@ -21,11 +22,16 @@ spring:
       hibernate:
         format_sql: true
 
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
   mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:your-email@example.com}
-    password: ${MAIL_PASSWORD:your-app-password}
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:your_email@gmail.com}
+    password: ${MAIL_PASSWORD:app_password_placeholder}
     properties:
       mail:
         smtp:
@@ -34,13 +40,14 @@ spring:
             enable: true
 
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${PORT:8080}
 
 jwt:
-  secret: ${JWT_SECRET:your-secret-key}
+  # Ensure this secret is at least 32-64 characters in production
+  secret: ${JWT_SECRET:placeholder_secret_key_for_dev_only}
 
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health

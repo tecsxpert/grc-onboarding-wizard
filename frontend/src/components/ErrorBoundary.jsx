@@ -1,25 +1,20 @@
 import React from "react";
 
 class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
+  state = { hasError: false };
 
   static getDerivedStateFromError() {
     return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
-    console.error("Error:", error, errorInfo);
-  }
-
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ textAlign: "center", marginTop: "40px" }}>
+        <div className="container" style={{ textAlign: "center" }}>
           <h2>Something went wrong</h2>
-          <p>Please refresh the page</p>
+          <button onClick={() => window.location.reload()}>
+            Refresh
+          </button>
         </div>
       );
     }

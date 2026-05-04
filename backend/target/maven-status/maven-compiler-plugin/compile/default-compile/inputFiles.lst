@@ -6,6 +6,7 @@ D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\JwtUtil.ja
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\SecurityConfig.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\controller\TestController.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\controller\UserController.java
+D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\DataSeeder.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\entity\BaseEntity.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\exception\DuplicateResourceException.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\controller\AuthController.java
@@ -15,6 +16,7 @@ D:\onboarding-wizard\backend\src\main\java\com\internship\tool\service\EmailServ
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\entity\Role.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\entity\User.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\ToolApplication.java
+D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\CorsConfig.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\exception\GlobalExceptionHandler.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\RedisConfig.java
 D:\onboarding-wizard\backend\src\main\java\com\internship\tool\config\JpaConfig.java

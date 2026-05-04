@@ -1,28 +1,31 @@
 spring:
   datasource:
-    url: ${TEST_DB_URL:jdbc:h2:mem:testdb}
-    driver-class-name: ${TEST_DB_DRIVER:org.h2.Driver}
-    username: ${TEST_DB_USERNAME:sa}
-    password: ${TEST_DB_PASSWORD:}
+    # Use environment variables with default fallbacks
+    url: ${DB_URL:jdbc:h2:mem:testdb}
+    driver-class-name: org.h2.Driver
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
 
   jpa:
     hibernate:
-      ddl-auto: ${TEST_JPA_DDL:create-drop}
+      ddl-auto: update # Changed from create-drop for safer defaults
 
   flyway:
-    enabled: ${TEST_FLYWAY_ENABLED:false}
+    enabled: false
 
   mail:
-    host: ${TEST_MAIL_HOST:localhost}
-    port: ${TEST_MAIL_PORT:1025}
-    username: ${TEST_MAIL_USERNAME:test}
-    password: ${TEST_MAIL_PASSWORD:test}
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+    username: ${MAIL_USER:test}
+    password: ${MAIL_PASS:test}
+
+jwt:
+
+  secret: ${JWT_SECRET:your_placeholder_secret_at_least_32_chars_long}
+  expiration: ${JWT_EXPIRATION:3600000}
+
 
   data:
     redis:
-      host: ${TEST_REDIS_HOST:localhost}
-      port: ${TEST_REDIS_PORT:6379}
-
-jwt:
-  secret: ${TEST_JWT_SECRET:testsecretkey123456789}
-  expiration: ${TEST_JWT_EXPIRATION:3600000}
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}

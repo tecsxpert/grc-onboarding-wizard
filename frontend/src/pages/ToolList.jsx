@@ -1,47 +1,65 @@
 import { useEffect, useState } from "react";
 import Skeleton from "../components/Skeleton";
 import EmptyState from "../components/EmptyState";
+import Card from "../components/Card";
 
 export default function ToolList() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
   const [error, setError] = useState(false);
 
-  // ✅ Correct way to get token
-  const token = localStorage.getItem("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Nzc2MTQzMjksImV4cCI6MTc3NzYxNzkyOX0.8_v8w3i59BiOeCTU2o8b_bwPugoBXkwMQQcJFXQ3fGs");
+  const fetchUsers = () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setError(true);
+      setData([]);
+      return;
+    }
+
+    fetch("http://localhost:8081/api/auth/users", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setData(res.content || res || []);
+        setError(false);
+      })
+      .catch(() => {
+        setError(true);
+        setData([]);
+      });
+  };
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
+    fetchUsers();
+  }, []);
 
-  fetch("http://localhost:8081/api/auth/users", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log("DATA:", res);
-      setData(res.content || res || []);
-      setLoading(false);
-    })
-    .catch(() => {
-      setError(true);
-      setLoading(false);
-    });
-},  [token]);
+  if (data === null) {
+    return (
+      <div className="container">
+        {[...Array(4)].map((_, i) => (
+          <Skeleton key={i} />
+        ))}
+      </div>
+    );
+  }
 
-  if (loading) return <Skeleton />;
-  if (error) return <p>Failed to load data</p>;
+  if (error) {
+    return (
+      <div className="container" style={{ textAlign: "center" }}>
+        <p>Error loading users</p>
+        <button onClick={fetchUsers}>Retry</button>
+      </div>
+    );
+  }
+
   if (data.length === 0) return <EmptyState />;
 
   return (
-    <div>
-      <h2>User List</h2>
+    <div className="container">
+      <h2>User List ({data.length})</h2>
       {data.map((user) => (
-        <div key={user.id}>
-          <h4>{user.name}</h4>
-          <p>{user.email}</p>
-        </div>
+        <Card key={user.id} user={user} />
       ))}
     </div>
   );

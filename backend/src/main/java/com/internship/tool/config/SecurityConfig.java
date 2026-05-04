@@ -7,8 +7,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;   // ✅ NEW
-import org.springframework.security.crypto.password.PasswordEncoder;      // ✅ NEW
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,17 +28,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // CORS
+                // ✅ CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // Disable CSRF
+                // ❌ Disable CSRF
                 .csrf(csrf -> csrf.disable())
 
-                // Disable default login
+                // ❌ Disable default login
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable())
 
-                // Handle Unauthorized
+                // ❗ Handle Unauthorized
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(
                         (request, response, authException) -> {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -46,49 +46,52 @@ public class SecurityConfig {
                         }
                 ))
 
-                // Authorization rules
+                // ✅ Authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        // ✅ Public endpoints
+
+                        // 🔓 Public APIs
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // ✅ Swagger
+                        // 🔓 Swagger (VERY IMPORTANT)
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/swagger-ui/index.html"
                         ).permitAll()
 
-                        // ✅ CORS preflight
+                        // 🔓 Allow OPTIONS (CORS preflight)
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // 🔒 Everything else secured
                         .anyRequest().authenticated()
                 )
 
-                // Stateless session
+                // ❗ Stateless
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // JWT filter
+                // 🔐 JWT Filter (after Swagger rules)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ✅ 🔥 REQUIRED FIX (this was missing)
+    // ✅ Password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // ✅ CORS config
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOriginPatterns(List.of("*"));
-        config.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept", "Authorization"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

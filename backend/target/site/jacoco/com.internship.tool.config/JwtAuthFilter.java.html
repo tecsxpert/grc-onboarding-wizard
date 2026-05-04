@@ -21,14 +21,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
 <span class="fc" id="L25">        String path = request.getServletPath();</span>
 
-        // ✅ FIX: match correct paths
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        return path.startsWith(&quot;/api/auth&quot;) ||          // 🔥 IMPORTANT FIX</span>
-<span class="pc bpc" id="L29" title="1 of 2 branches missed.">                path.startsWith(&quot;/swagger&quot;) ||</span>
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">                path.startsWith(&quot;/v3/api-docs&quot;) ||</span>
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">                path.startsWith(&quot;/swagger-ui&quot;);</span>
+        // ✅ Skip JWT filter for public + swagger + preflight
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        return path.startsWith(&quot;/api/auth&quot;)</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">                || path.startsWith(&quot;/swagger-ui&quot;)</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">                || path.startsWith(&quot;/v3/api-docs&quot;)</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">                || path.startsWith(&quot;/swagger-ui/index.html&quot;)</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">                || &quot;OPTIONS&quot;.equalsIgnoreCase(request.getMethod());</span>
     }
 
     @Override
@@ -37,44 +38,45 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-<span class="fc" id="L40">        String authHeader = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="fc" id="L41">        String authHeader = request.getHeader(&quot;Authorization&quot;);</span>
 
-        // ✅ No token → just continue (Spring will handle auth)
-<span class="pc bpc" id="L43" title="3 of 4 branches missed.">        if (authHeader == null || !authHeader.startsWith(&quot;Bearer &quot;)) {</span>
-<span class="fc" id="L44">            filterChain.doFilter(request, response);</span>
-<span class="fc" id="L45">            return;</span>
+        // ✅ No token → continue (Spring will handle access)
+<span class="pc bpc" id="L44" title="3 of 4 branches missed.">        if (authHeader == null || !authHeader.startsWith(&quot;Bearer &quot;)) {</span>
+<span class="fc" id="L45">            filterChain.doFilter(request, response);</span>
+<span class="fc" id="L46">            return;</span>
         }
 
-<span class="nc" id="L48">        String token = authHeader.substring(7);</span>
+<span class="nc" id="L49">        String token = authHeader.substring(7);</span>
 
         try {
-<span class="nc" id="L51">            String username = jwtUtil.extractUsername(token);</span>
-<span class="nc" id="L52">            String role = jwtUtil.extractRole(token);</span>
+<span class="nc" id="L52">            String username = jwtUtil.extractUsername(token);</span>
+<span class="nc" id="L53">            String role = jwtUtil.extractRole(token);</span>
 
-<span class="nc bnc" id="L54" title="All 4 branches missed.">            if (username != null &amp;&amp;</span>
-                    role != null &amp;&amp;
-<span class="nc bnc" id="L56" title="All 2 branches missed.">                    jwtUtil.validateToken(token, username) &amp;&amp;</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">                    SecurityContextHolder.getContext().getAuthentication() == null) {</span>
+            // ✅ Validate token and set authentication
+<span class="nc bnc" id="L56" title="All 4 branches missed.">            if (username != null</span>
+                    &amp;&amp; role != null
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                    &amp;&amp; jwtUtil.validateToken(token, username)</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                    &amp;&amp; SecurityContextHolder.getContext().getAuthentication() == null) {</span>
 
-<span class="nc" id="L59">                List&lt;SimpleGrantedAuthority&gt; authorities =</span>
-<span class="nc" id="L60">                        List.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + role));</span>
+<span class="nc" id="L61">                List&lt;SimpleGrantedAuthority&gt; authorities =</span>
+<span class="nc" id="L62">                        List.of(new SimpleGrantedAuthority(&quot;ROLE_&quot; + role));</span>
 
-<span class="nc" id="L62">                UsernamePasswordAuthenticationToken auth =</span>
+<span class="nc" id="L64">                UsernamePasswordAuthenticationToken authentication =</span>
                         new UsernamePasswordAuthenticationToken(
                                 username,
                                 null,
                                 authorities
                         );
 
-<span class="nc" id="L69">                SecurityContextHolder.getContext().setAuthentication(auth);</span>
+<span class="nc" id="L71">                SecurityContextHolder.getContext().setAuthentication(authentication);</span>
             }
 
-<span class="nc" id="L72">        } catch (Exception e) {</span>
-            // ✅ Never break flow
-<span class="nc" id="L74">            System.out.println(&quot;Invalid JWT: &quot; + e.getMessage());</span>
-<span class="nc" id="L75">        }</span>
+<span class="nc" id="L74">        } catch (Exception e) {</span>
+            // ✅ Don't break flow
+<span class="nc" id="L76">            System.out.println(&quot;Invalid JWT: &quot; + e.getMessage());</span>
+<span class="nc" id="L77">        }</span>
 
-<span class="nc" id="L77">        filterChain.doFilter(request, response);</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L79">        filterChain.doFilter(request, response);</span>
+<span class="nc" id="L80">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

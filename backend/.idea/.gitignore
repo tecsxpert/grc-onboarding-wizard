@@ -1,5 +1,7 @@
 # Environment variables (REAL secrets)
 .env
+.env.test
+
 
 # Local override configs (safe to ignore)
 application-local.yml

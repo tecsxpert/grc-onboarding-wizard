@@ -21,14 +21,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
 
-        // ✅ FIX: match correct paths
-        return path.startsWith("/api/auth") ||          // 🔥 IMPORTANT FIX
-                path.startsWith("/swagger") ||
-                path.startsWith("/v3/api-docs") ||
-                path.startsWith("/swagger-ui");
+        // ✅ Skip JWT filter for public + swagger + preflight
+        return path.startsWith("/api/auth")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/v3/api-docs")
+                || path.startsWith("/swagger-ui/index.html")
+                || "OPTIONS".equalsIgnoreCase(request.getMethod());
     }
 
     @Override
@@ -39,7 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        // ✅ No token → just continue (Spring will handle auth)
+        // ✅ No token → continue (Spring will handle access)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -51,26 +52,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String username = jwtUtil.extractUsername(token);
             String role = jwtUtil.extractRole(token);
 
-            if (username != null &&
-                    role != null &&
-                    jwtUtil.validateToken(token, username) &&
-                    SecurityContextHolder.getContext().getAuthentication() == null) {
+            // ✅ Validate token and set authentication
+            if (username != null
+                    && role != null
+                    && jwtUtil.validateToken(token, username)
+                    && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 List<SimpleGrantedAuthority> authorities =
                         List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
-                UsernamePasswordAuthenticationToken auth =
+                UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 username,
                                 null,
                                 authorities
                         );
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
         } catch (Exception e) {
-            // ✅ Never break flow
+            // ✅ Don't break flow
             System.out.println("Invalid JWT: " + e.getMessage());
         }
 

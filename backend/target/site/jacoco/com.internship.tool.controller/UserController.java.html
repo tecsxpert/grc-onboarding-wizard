@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication; // ✅ for debugging
 
+@CrossOrigin(origins = &quot;*&quot;)
 @RestController
 @RequestMapping(&quot;/users&quot;)
-<span class="fc" id="L20">public class UserController {</span>
+<span class="fc" id="L21">public class UserController {</span>
 
     @Autowired
     private UserService userService;
@@ -27,7 +28,7 @@ import org.springframework.security.core.Authentication; // ✅ for debugging
     // =========================
     @GetMapping(&quot;/debug&quot;)
     public String debug(Authentication auth) {
-<span class="nc" id="L30">        return &quot;User: &quot; + auth.getName() + &quot; | Roles: &quot; + auth.getAuthorities();</span>
+<span class="nc" id="L31">        return &quot;User: &quot; + auth.getName() + &quot; | Roles: &quot; + auth.getAuthorities();</span>
     }
 
     // =========================
@@ -36,7 +37,7 @@ import org.springframework.security.core.Authentication; // ✅ for debugging
     @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
     @PostMapping
     public ResponseEntity&lt;User&gt; createUser(@Valid @RequestBody User user) {
-<span class="nc" id="L39">        return new ResponseEntity&lt;&gt;(userService.createUser(user), HttpStatus.CREATED);</span>
+<span class="nc" id="L40">        return new ResponseEntity&lt;&gt;(userService.createUser(user), HttpStatus.CREATED);</span>
     }
 
     // =========================
@@ -45,7 +46,7 @@ import org.springframework.security.core.Authentication; // ✅ for debugging
     @PreAuthorize(&quot;hasAnyRole('USER','ADMIN')&quot;)
     @GetMapping
     public ResponseEntity&lt;Page&lt;User&gt;&gt; getAllUsers(Pageable pageable) {
-<span class="fc" id="L48">        return ResponseEntity.ok(userService.getAllUsers(pageable));</span>
+<span class="fc" id="L49">        return ResponseEntity.ok(userService.getAllUsers(pageable));</span>
     }
 
     // =========================
@@ -54,7 +55,7 @@ import org.springframework.security.core.Authentication; // ✅ for debugging
     @PreAuthorize(&quot;hasAnyRole('USER','ADMIN')&quot;)
     @GetMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;User&gt; getUserById(@PathVariable Long id) {
-<span class="fc" id="L57">        return ResponseEntity.ok(userService.getUserById(id));</span>
+<span class="fc" id="L58">        return ResponseEntity.ok(userService.getUserById(id));</span>
     }
 
     // =========================
@@ -63,7 +64,7 @@ import org.springframework.security.core.Authentication; // ✅ for debugging
     @PreAuthorize(&quot;hasAnyRole('USER','ADMIN')&quot;)
     @GetMapping(&quot;/email&quot;)
     public ResponseEntity&lt;User&gt; getUserByEmail(@RequestParam String email) {
-<span class="nc" id="L66">        return ResponseEntity.ok(userService.getUserByEmail(email));</span>
+<span class="nc" id="L67">        return ResponseEntity.ok(userService.getUserByEmail(email));</span>
     }
 
     // =========================
@@ -73,7 +74,7 @@ import org.springframework.security.core.Authentication; // ✅ for debugging
     @PutMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;User&gt; updateUser(@PathVariable Long id,
                                            @Valid @RequestBody User user) {
-<span class="nc" id="L76">        return ResponseEntity.ok(userService.updateUser(id, user));</span>
+<span class="nc" id="L77">        return ResponseEntity.ok(userService.updateUser(id, user));</span>
     }
 
     // =========================
@@ -82,8 +83,8 @@ import org.springframework.security.core.Authentication; // ✅ for debugging
     @PreAuthorize(&quot;hasRole('ADMIN')&quot;)
     @DeleteMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;String&gt; deleteUser(@PathVariable Long id) {
-<span class="nc" id="L85">        userService.deleteUser(id);</span>
-<span class="nc" id="L86">        return ResponseEntity.ok(&quot;User deleted successfully&quot;);</span>
+<span class="nc" id="L86">        userService.deleteUser(id);</span>
+<span class="nc" id="L87">        return ResponseEntity.ok(&quot;User deleted successfully&quot;);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
