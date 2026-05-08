@@ -11,4 +11,8 @@ def health():
     status = get_health_status()
     status["embedding_model"] = get_model_status()
     status["chromadb"] = get_collection_stats()
+    """
+    Returns health status of the AI service.
+    """
+    status = get_health_status()
     return jsonify(status), 200
