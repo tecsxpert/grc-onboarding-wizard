@@ -1,5 +1,10 @@
 package com.siddanna.backend.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import jakarta.validation.Valid;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,6 +46,10 @@ public class OnboardingController {
 
     // ✅ CREATE
     @PostMapping
+public Onboarding save(@Valid @RequestBody Onboarding data) {
+    return repo.save(data);
+
+}
     public Onboarding save(@Valid @RequestBody Onboarding data) {
         return repo.save(data);
     }
@@ -53,6 +62,9 @@ public class OnboardingController {
             @RequestParam(required = false) String endDate
     ) {
 
+        // 🔥 DATE FILTER LOGIC
+        if (startDate != null && endDate != null &&
+            !startDate.isEmpty() && !endDate.isEmpty()) {
         if (startDate != null && endDate != null &&
                 !startDate.isEmpty() && !endDate.isEmpty()) {
 
@@ -62,6 +74,7 @@ public class OnboardingController {
             return repo.findByDeletedFalseAndCreatedAtBetween(start, end, pageable);
         }
 
+        // DEFAULT
         return repo.findByDeletedFalse(pageable);
     }
 
@@ -96,6 +109,7 @@ public class OnboardingController {
 
     // ✅ SEARCH
     @GetMapping("/search")
+    public java.util.List<Onboarding> search(@RequestParam String q) {
     public List<Onboarding> search(@RequestParam String q) {
         return repo.findAll().stream()
                 .filter(o -> !Boolean.TRUE.equals(o.getDeleted()))

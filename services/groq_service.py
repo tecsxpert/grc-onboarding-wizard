@@ -3,14 +3,15 @@ import os
 import json
 import time
 from groq import Groq
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from prompts.primary_prompt import get_primary_prompt
 from prompts.recommend_prompt import get_recommend_prompt
 from prompts.report_prompt import get_report_prompt
 from services.health_service import record_response_time
 from services.cache_service import get_from_cache, set_in_cache, make_cache_key
 
-load_dotenv()
+# Force reload .env file
+load_dotenv(find_dotenv(), override=True)
 
 # Connect to Groq
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
@@ -86,8 +87,8 @@ def call_groq(user_input: str) -> dict:
         start = time.time()
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            max_tokens=500,        # Optimised for speed
-            temperature=0.3,       # Lower = faster + more consistent
+            max_tokens=500,
+            temperature=0.3,
             messages=[
                 {"role": "user", "content": get_primary_prompt(user_input)}
             ]
@@ -116,7 +117,7 @@ def call_groq_recommend(user_input: str) -> dict:
         start = time.time()
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            max_tokens=600,        # Optimised for speed
+            max_tokens=600,
             temperature=0.3,
             messages=[
                 {"role": "user", "content": get_recommend_prompt(user_input)}
@@ -152,7 +153,7 @@ def call_groq_report(user_input: str) -> dict:
         start = time.time()
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            max_tokens=1000,       # Optimised for speed
+            max_tokens=1000,
             temperature=0.3,
             messages=[
                 {"role": "user", "content": get_report_prompt(user_input)}

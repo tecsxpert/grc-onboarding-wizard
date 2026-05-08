@@ -15,6 +15,8 @@ function DetailPage() {
   }, []);
 
   const fetchData = async () => {
+    const res = await API.get(`/onboarding/${id}`);
+    setData(res.data);
     const res = await API.get(`/onboarding?page=0&size=100`);
     const item = res.data.content.find((x) => x.id == id);
     setData(item);
@@ -52,6 +54,10 @@ function DetailPage() {
           </span>
         </div>
 
+        <div className="mt-4 flex gap-3">
+          <button
+            className="bg-yellow-400 px-3 py-1"
+            onClick={() => navigate(`/edit/${id}`)} // ✅ FIXED
         {/* BUTTONS */}
         <div className="mt-4 flex gap-3">
 
@@ -68,6 +74,8 @@ function DetailPage() {
           >
             Delete
           </button>
+        </div>
+
 
           {/* 🔥 ANALYZE BUTTON */}
           <button
